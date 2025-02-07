@@ -59,28 +59,28 @@ EXECUTE FUNCTION set_user_id();
 
 1. Go to Google Cloud Console (https://console.cloud.google.com)
 
-   - Create a new project or select existing one
-   - Go to "APIs & Services" > "Credentials"
-   - Click "Create Credentials" > "OAuth client ID"
-   - Select "Web application"
-   - Configure the authorized origins and redirect URIs
+    - Create a new project or select existing one
+    - Go to "APIs & Services" > "Credentials"
+    - Click "Create Credentials" > "OAuth client ID"
+    - Select "Web application"
+    - Configure the authorized origins and redirect URIs
 
 2. Go to Authentication → Providers in your Supabase Dashboard
 3. Enable Google authentication
 4. Configure OAuth credentials:
 
-   - Get Client ID and Client Secret from Google Cloud Console
-   - Set up authorized origins and redirect URIs:
+    - Get Client ID and Client Secret from Google Cloud Console
+    - Set up authorized origins and redirect URIs:
 
-     ```
-     Authorized JavaScript origins:
-     http://localhost:5180
+        ```
+        Authorized JavaScript origins:
+        http://localhost:5180
 
-     Authorized redirect URIs:
-     https://xijwjqpanhrlswoqgnas.supabase.co/auth/v1/callback
-     ```
+        Authorized redirect URIs (USE YOUR OWN FROM SUPABASE):
+        https://xijwjqpanhrlswoqgnas.supabase.co/auth/v1/callback
+        ```
 
-   - Add your development URL (e.g., http://localhost:5180)
+    - Add your development URL (e.g., http://localhost:5180)
 
 ## 3. Install Required Dependencies
 
@@ -108,7 +108,7 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error("Missing Supabase environment variables");
+	throw new Error("Missing Supabase environment variables");
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -124,57 +124,57 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../config/supabase";
 
 interface AuthContextType {
-  session: Session | null;
-  user: User | null;
-  loading: boolean;
-  signOut: () => Promise<void>;
+	session: Session | null;
+	user: User | null;
+	loading: boolean;
+	signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+	const [session, setSession] = useState<Session | null>(null);
+	const [user, setUser] = useState<User | null>(null);
+	const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+	useEffect(() => {
+		supabase.auth.getSession().then(({ data: { session } }) => {
+			setSession(session);
+			setUser(session?.user ?? null);
+			setLoading(false);
+		});
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+		const {
+			data: { subscription },
+		} = supabase.auth.onAuthStateChange((_event, session) => {
+			setSession(session);
+			setUser(session?.user ?? null);
+			setLoading(false);
+		});
 
-    return () => subscription.unsubscribe();
-  }, []);
+		return () => subscription.unsubscribe();
+	}, []);
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
-  };
+	const signOut = async () => {
+		await supabase.auth.signOut();
+	};
 
-  const value = {
-    session,
-    user,
-    loading,
-    signOut,
-  };
+	const value = {
+		session,
+		user,
+		loading,
+		signOut,
+	};
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
+	const context = useContext(AuthContext);
+	if (context === undefined) {
+		throw new Error("useAuth must be used within an AuthProvider");
+	}
+	return context;
 }
 ```
 
@@ -189,40 +189,40 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "../../config/supabase";
 
 export const Login = () => {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-        p: 3,
-      }}
-    >
-      <Paper elevation={3} sx={{ p: 4, maxWidth: 400, width: "100%" }}>
-        <Typography variant="h5" gutterBottom textAlign="center">
-          Welcome
-        </Typography>
-        <Auth
-          supabaseClient={supabase}
-          appearance={{
-            theme: ThemeSupa,
-            variables: {
-              default: {
-                colors: {
-                  brand: "#1976d2",
-                  brandAccent: "#1565c0",
-                },
-              },
-            },
-          }}
-          providers={["google"]}
-          socialLayout="horizontal"
-          view="sign_in"
-        />
-      </Paper>
-    </Box>
-  );
+	return (
+		<Box
+			sx={{
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+				minHeight: "100vh",
+				p: 3,
+			}}
+		>
+			<Paper elevation={3} sx={{ p: 4, maxWidth: 400, width: "100%" }}>
+				<Typography variant="h5" gutterBottom textAlign="center">
+					Welcome
+				</Typography>
+				<Auth
+					supabaseClient={supabase}
+					appearance={{
+						theme: ThemeSupa,
+						variables: {
+							default: {
+								colors: {
+									brand: "#1976d2",
+									brandAccent: "#1565c0",
+								},
+							},
+						},
+					}}
+					providers={["google"]}
+					socialLayout="horizontal"
+					view="sign_in"
+				/>
+			</Paper>
+		</Box>
+	);
 };
 ```
 
@@ -236,33 +236,33 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 interface ProtectedRouteProps {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, loading } = useAuth();
-  const location = useLocation();
+	const { user, loading } = useAuth();
+	const location = useLocation();
 
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
+	if (loading) {
+		return (
+			<Box
+				sx={{
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+					height: "100vh",
+				}}
+			>
+				<CircularProgress />
+			</Box>
+		);
+	}
 
-  if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
+	if (!user) {
+		return <Navigate to="/login" state={{ from: location }} replace />;
+	}
 
-  return <>{children}</>;
+	return <>{children}</>;
 };
 ```
 
@@ -276,16 +276,16 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 export const AuthRedirect = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
+	const { user } = useAuth();
+	const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user) {
-      navigate("/protected");
-    }
-  }, [user, navigate]);
+	useEffect(() => {
+		if (user) {
+			navigate("/protected");
+		}
+	}, [user, navigate]);
 
-  return null;
+	return null;
 };
 ```
 
@@ -342,9 +342,9 @@ If you encounter issues:
 4. Verify RLS policies are correctly set up
 5. Check if user is properly authenticated using browser dev tools
 6. For RLS issues:
-   - Check that policies are correctly created in Supabase
-   - Verify user_id is being set correctly in the trigger
-   - Test policies directly in Supabase SQL editor
+    - Check that policies are correctly created in Supabase
+    - Verify user_id is being set correctly in the trigger
+    - Test policies directly in Supabase SQL editor
 
 ## Security Notes
 
@@ -354,13 +354,13 @@ If you encounter issues:
 4. Use appropriate RLS policies to protect your data
 5. Store sensitive files (like client_secret\*.json) outside of source control
 6. Use .gitignore to exclude sensitive files:
-   ```
-   # .gitignore
-   .env
-   .env.local
-   *.secret.json
-   client_secret*.json
-   ```
+    ```
+    # .gitignore
+    .env
+    .env.local
+    *.secret.json
+    client_secret*.json
+    ```
 
 ## Environment Variables Setup
 
