@@ -17,6 +17,9 @@ export const Navigation = () => {
 				<Button color="inherit" component={RouterLink} to="/protected" startIcon={<Lock />}>
 					Protected data
 				</Button>
+				<Button color="inherit" component={RouterLink} to="/countries">
+					Countries
+				</Button>
 				{user ? (
 					<>
 						<Button color="inherit" onClick={signOut}>
