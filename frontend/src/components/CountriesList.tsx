@@ -6,7 +6,7 @@ import {
 	selectCountriesLoading,
 } from "../store/slices/countriesSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import CountryListItem from "./CountryListItem";
+import CountryCard from "./CountryCard";
 import Grid from "@mui/material/Grid2";
 
 const CountriesList = () => {
@@ -28,7 +28,7 @@ const CountriesList = () => {
 		<Grid container spacing={2}>
 			{countries.map((country) => (
 				<Grid xs={12} sm={6} md={4} lg={3} key={country.name.common}>
-					<CountryListItem country={country} />
+					<CountryCard country={country} />
 				</Grid>
 			))}
 		</Grid>
