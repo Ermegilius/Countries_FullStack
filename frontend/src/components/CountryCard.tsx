@@ -24,8 +24,8 @@ const CountryCard = ({ country }: CountryCardProps) => {
 				borderRadius: 0,
 				borderBottomLeftRadius: 4,
 				borderBottomRightRadius: 4,
-				maxWidth: 345,
 				transition: "background-color 0.2s",
+				backgroundColor: "#d3d3d3",
 				"&:hover": {
 					backgroundColor: (theme) => theme.palette.action.hover,
 				},
@@ -38,6 +38,7 @@ const CountryCard = ({ country }: CountryCardProps) => {
 					height="140"
 					image={country.flags.png}
 					alt={country.flags.alt || country.name.common}
+					sx={{ objectFit: "contain" }}
 				/>
 				<CardContent>
 					<Typography variant="h5" component="div">

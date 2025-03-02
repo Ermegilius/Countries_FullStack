@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { CountryState } from "../../types/country";
 import { countriesApi } from "../../api/services/countries";
 import { RootState } from "../store";
+import { weatherApi } from "../../api/services/weather";
 
 const initialState: CountryState = {
 	countries: [],
@@ -14,6 +15,14 @@ export const fetchAllCountries = createAsyncThunk("countries/fetchAllCountries",
 	const response = await countriesApi.getAllCountries();
 	return response;
 });
+
+export const fetchWeatherByCapital = createAsyncThunk(
+	"countries/fetchWeatherByCapital",
+	async ({ capital, units }: { capital: string; units: "metric" | "imperial" }) => {
+		const response = await weatherApi.getWeatherByCapital(capital, units);
+		return response;
+	}
+);
 
 export const countriesSlice = createSlice({
 	name: "countries",

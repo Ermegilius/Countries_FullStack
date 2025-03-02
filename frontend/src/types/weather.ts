@@ -1,13 +1,13 @@
 export interface WeatherData {
 	main: {
-		temperature: number;
+		temp: number;
 		feels_like: number;
 		humidity: number;
 	};
 	weather: {
 		description: string;
 		icon: string;
-	};
+	}[];
 	wind: {
 		speed: number;
 	};

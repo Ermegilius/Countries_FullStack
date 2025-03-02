@@ -9,6 +9,7 @@ import { Country } from "../types/country";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useEffect } from "react";
 import { Button, Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
+import WeatherInfo from "./WeatherInfo";
 
 const CountryDetail = () => {
 	const { name } = useParams();
@@ -41,57 +42,60 @@ const CountryDetail = () => {
 				</Typography>
 			)}
 			{selectedCountry && (
-				<Card
-					sx={{
-						maxWidth: 600,
-						mx: "auto",
-						mt: 4,
-						px: 2,
-						py: 3,
-						boxShadow: 3,
-					}}
-				>
-					<CardMedia
-						component="img"
-						image={selectedCountry.flags.png}
-						alt={selectedCountry.flags.alt || selectedCountry.name.common}
-						sx={{ objectFit: "contain", height: 250 }}
-					/>
-					<CardContent>
-						<Typography variant="h4" gutterBottom>
-							{selectedCountry.name.common}
-						</Typography>
-						<Typography variant="body1" sx={{ mb: 1 }}>
-							<strong>Official Name:</strong> {selectedCountry.name.official}
-						</Typography>
-						<Typography variant="body1" sx={{ mb: 1 }}>
-							<strong>Region:</strong> {selectedCountry.region}
-						</Typography>
-						<Typography variant="body1" sx={{ mb: 1 }}>
-							<strong>Subregion:</strong> {selectedCountry.subregion}
-						</Typography>
-						<Typography variant="body1" sx={{ mb: 1 }}>
-							<strong>Population:</strong> {selectedCountry.population.toLocaleString()}
-						</Typography>
-						<Typography variant="body1" sx={{ mb: 1 }}>
-							<strong>Capital:</strong>{" "}
-							{selectedCountry.capital ? selectedCountry.capital.join(", ") : "N/A"}
-						</Typography>
-						<Typography variant="body1">
-							<strong>Currencies: </strong>
-							{selectedCountry.currencies
-								? Object.values(selectedCountry.currencies)
-										.map((currency) => `${currency.name} (${currency.symbol})`)
-										.join(", ")
-								: "N/A"}
-						</Typography>
-					</CardContent>
-					<Box sx={{ display: "flex", justifyContent: "center", pb: 2 }}>
-						<Button variant="contained" onClick={() => navigate(-1)}>
-							Back
-						</Button>
-					</Box>
-				</Card>
+				<>
+					<Card
+						sx={{
+							maxWidth: 600,
+							mx: "auto",
+							mt: 4,
+							px: 2,
+							py: 3,
+							boxShadow: 3,
+						}}
+					>
+						<CardMedia
+							component="img"
+							image={selectedCountry.flags.png}
+							alt={selectedCountry.flags.alt || selectedCountry.name.common}
+							sx={{ objectFit: "contain", height: 250 }}
+						/>
+						<CardContent>
+							<Typography variant="h4" gutterBottom>
+								{selectedCountry.name.common}
+							</Typography>
+							<Typography variant="body1" sx={{ mb: 1 }}>
+								<strong>Official Name:</strong> {selectedCountry.name.official}
+							</Typography>
+							<Typography variant="body1" sx={{ mb: 1 }}>
+								<strong>Region:</strong> {selectedCountry.region}
+							</Typography>
+							<Typography variant="body1" sx={{ mb: 1 }}>
+								<strong>Subregion:</strong> {selectedCountry.subregion}
+							</Typography>
+							<Typography variant="body1" sx={{ mb: 1 }}>
+								<strong>Population:</strong> {selectedCountry.population.toLocaleString()}
+							</Typography>
+							<Typography variant="body1" sx={{ mb: 1 }}>
+								<strong>Capital:</strong>{" "}
+								{selectedCountry.capital ? selectedCountry.capital.join(", ") : "N/A"}
+							</Typography>
+							<Typography variant="body1">
+								<strong>Currencies: </strong>
+								{selectedCountry.currencies
+									? Object.values(selectedCountry.currencies)
+											.map((currency) => `${currency.name} (${currency.symbol})`)
+											.join(", ")
+									: "N/A"}
+							</Typography>
+						</CardContent>
+						<Box sx={{ display: "flex", justifyContent: "center", pb: 2 }}>
+							<Button variant="contained" onClick={() => navigate(-1)}>
+								Back
+							</Button>
+						</Box>
+					</Card>
+					<WeatherInfo country={selectedCountry} />
+				</>
 			)}
 		</>
 	);
