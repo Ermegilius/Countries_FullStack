@@ -87,6 +87,7 @@ const CountryDetail = () => {
 											.join(", ")
 									: "N/A"}
 							</Typography>
+							<WeatherInfo country={selectedCountry} />
 						</CardContent>
 						<Box sx={{ display: "flex", justifyContent: "center", pb: 2 }}>
 							<Button variant="contained" onClick={() => navigate(-1)}>
@@ -94,7 +95,6 @@ const CountryDetail = () => {
 							</Button>
 						</Box>
 					</Card>
-					<WeatherInfo country={selectedCountry} />
 				</>
 			)}
 		</>
