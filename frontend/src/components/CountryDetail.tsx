@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
 	fetchAllCountries,
 	selectAllCountries,
@@ -8,17 +8,18 @@ import {
 import { Country } from "../types/country";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useEffect } from "react";
+import { Button } from "@mui/material";
 
 const CountryDetail = () => {
 	const { name } = useParams();
 	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 	const countries = useAppSelector(selectAllCountries);
 	const loading = useAppSelector(selectCountriesLoading);
 	const error = useAppSelector(selectCountriesError);
 
 	const selectedCountry = countries.find(
-		(c: Country) =>
-			c.name.common.toLowerCase() === decodeURIComponent(name || "").toLocaleLowerCase()
+		(c: Country) => c.name.common.toLowerCase() === decodeURIComponent(name || "").toLocaleLowerCase()
 	);
 
 	useEffect(() => {
@@ -26,9 +27,6 @@ const CountryDetail = () => {
 			dispatch(fetchAllCountries());
 		}
 	}, [countries.length, dispatch]);
-
-	console.log(name);
-	console.log("Countries: ", countries);
 
 	return (
 		<>
@@ -41,10 +39,7 @@ const CountryDetail = () => {
 					<p>Region: {selectedCountry.region}</p>
 					<p>Subregion: {selectedCountry.subregion}</p>
 					<p>Population: {selectedCountry.population.toLocaleString()}</p>
-					<p>
-						Capital:{" "}
-						{selectedCountry.capital ? selectedCountry.capital.join(", ") : "N/A"}
-					</p>
+					<p>Capital: {selectedCountry.capital ? selectedCountry.capital.join(", ") : "N/A"}</p>
 					<p>
 						Currencies:{" "}
 						{selectedCountry.currencies
@@ -57,6 +52,9 @@ const CountryDetail = () => {
 						src={selectedCountry.flags.png}
 						alt={selectedCountry.flags.alt || selectedCountry.name.common}
 					/>
+					<Button variant="contained" sx={{ mt: 2 }} onClick={() => navigate(-1)}>
+						Back
+					</Button>
 				</div>
 			)}
 		</>
