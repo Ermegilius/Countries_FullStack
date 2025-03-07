@@ -58,7 +58,9 @@ const WeatherInfo = ({ country }: WeatherInfoProps) => {
 						alt={weather.weather[0].description}
 					/>
 					<Box ml={2}>
-						<Typography variant="body1">Temperature: {weather.main.temp} °C</Typography>
+						<Typography variant="body1">
+							Temperature: {weather.main.temp.toFixed(1)} °C
+						</Typography>
 						<Typography variant="body1">Humidity: {weather.main.humidity}%</Typography>
 						<Typography variant="body1">
 							Wind Speed: {weather.wind.speed} m/s

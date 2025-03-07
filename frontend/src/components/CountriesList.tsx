@@ -27,7 +27,7 @@ const CountriesList = () => {
 	return (
 		<Grid container spacing={2} sx={{ flexWrap: "wrap" }}>
 			{countries.map((country) => (
-				<Grid width={300} key={country.name.common}>
+				<Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={country.name.common}>
 					<CountryCard country={country} />
 				</Grid>
 			))}

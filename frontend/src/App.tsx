@@ -9,6 +9,7 @@ import ProtectedTestData from "./components/ProtectedTestData";
 import { AuthRedirect } from "./components/Auth/AuthRedirect";
 import CountriesList from "./components/CountriesList";
 import CountryDetail from "./components/CountryDetail";
+import Favorites from "./components/Favorites";
 
 function App() {
 	return (
@@ -36,6 +37,14 @@ function App() {
 								element={
 									<ProtectedRoute>
 										<ProtectedTestData />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/favorites"
+								element={
+									<ProtectedRoute>
+										<Favorites />
 									</ProtectedRoute>
 								}
 							/>

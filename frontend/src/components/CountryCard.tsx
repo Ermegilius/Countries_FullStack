@@ -5,6 +5,8 @@ import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import { CardActions } from "@mui/material";
+import FavoriteButton from "./FavoriteButton";
 
 interface CountryCardProps {
 	country: Country;
@@ -30,9 +32,8 @@ const CountryCard = ({ country }: CountryCardProps) => {
 					backgroundColor: (theme) => theme.palette.action.hover,
 				},
 			}}
-			onClick={handleDetailsClick}
 		>
-			<CardActionArea>
+			<CardActionArea onClick={handleDetailsClick}>
 				<CardMedia
 					component="img"
 					height="140"
@@ -52,6 +53,10 @@ const CountryCard = ({ country }: CountryCardProps) => {
 					</Typography>
 				</CardContent>
 			</CardActionArea>
+
+			<CardActions sx={{ mt: "auto", justifyContent: "flex-end" }}>
+				<FavoriteButton country={country} />
+			</CardActions>
 		</Card>
 	);
 };
