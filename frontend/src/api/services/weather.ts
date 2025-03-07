@@ -3,7 +3,7 @@ import { WeatherData } from "../../types/weather";
 
 export const weatherApi = {
 	getWeatherByCapital: (city: string, units: "metric" | "imperial"): Promise<WeatherData> => {
-		const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
+		const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 		if (!API_KEY) {
 			throw new Error("Missing API key. Please add your API key to the .env file.");
 		}

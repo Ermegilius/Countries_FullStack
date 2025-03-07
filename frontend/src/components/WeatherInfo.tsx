@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { Country } from "../types/country";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchWeatherByCapital, selectCountriesError, selectCountriesLoading } from "../store/slices/countriesSlice";
+import {
+	fetchWeatherByCapital,
+	selectCountriesError,
+	selectCountriesLoading,
+} from "../store/slices/countriesSlice";
 import { Box, Typography } from "@mui/material";
 import { WeatherData } from "../types/weather";
 
@@ -16,6 +20,12 @@ const WeatherInfo = ({ country }: WeatherInfoProps) => {
 	const [weather, setWeather] = useState<WeatherData | null>(null);
 
 	useEffect(() => {
+		const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
+		if (!apiKey) {
+			console.error("Missing API key. Please add your API key to the .env file.");
+			return;
+		}
+
 		if (country && country.capital && country.capital.length > 0) {
 			// Pass the first capital as a string and choose the units (e.g., "metric")
 			dispatch(fetchWeatherByCapital({ capital: country.capital[0], units: "metric" }))
@@ -36,7 +46,10 @@ const WeatherInfo = ({ country }: WeatherInfoProps) => {
 		<Box sx={{ mt: 2 }}>
 			<Typography variant="h6" gutterBottom>
 				Current weather in{" "}
-				{country.capital && country.capital.length > 0 ? country.capital[0] : country.name.common}:
+				{country.capital && country.capital.length > 0
+					? country.capital[0]
+					: country.name.common}
+				:
 			</Typography>
 			{weather ? (
 				<Box display="flex" alignItems="center">
@@ -47,7 +60,9 @@ const WeatherInfo = ({ country }: WeatherInfoProps) => {
 					<Box ml={2}>
 						<Typography variant="body1">Temperature: {weather.main.temp} °C</Typography>
 						<Typography variant="body1">Humidity: {weather.main.humidity}%</Typography>
-						<Typography variant="body1">Wind Speed: {weather.wind.speed} m/s</Typography>
+						<Typography variant="body1">
+							Wind Speed: {weather.wind.speed} m/s
+						</Typography>
 						<Typography variant="body2" color="text.secondary">
 							{weather.weather[0].description}
 						</Typography>
