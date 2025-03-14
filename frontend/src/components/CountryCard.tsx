@@ -16,7 +16,7 @@ const CountryCard = ({ country }: CountryCardProps) => {
 	const navigate = useNavigate();
 
 	const handleDetailsClick = () => {
-		navigate(`/countries/${encodeURIComponent(country.name.common)}`);
+		navigate(`/countries/${encodeURIComponent(country.name.common.toLowerCase())}`);
 	};
 
 	return (
@@ -46,10 +46,22 @@ const CountryCard = ({ country }: CountryCardProps) => {
 						{country.name.common}
 					</Typography>
 					<Typography variant="body2" color="text.secondary">
-						Region: {country.region}
+						Region: {country.region} ({country.subregion})
 					</Typography>
 					<Typography variant="body2" color="text.secondary">
 						Capital: {country.capital ? country.capital.join(", ") : "N/A"}
+					</Typography>
+					<Typography variant="body2" color="text.secondary">
+						Population: {country.population.toLocaleString()}
+					</Typography>
+					<Typography variant="body2" color="text.secondary">
+						Currency:{" "}
+						{country.currencies
+							? Object.values(country.currencies)[0].name +
+							  " (" +
+							  Object.values(country.currencies)[0].symbol +
+							  ")"
+							: "N/A"}
 					</Typography>
 				</CardContent>
 			</CardActionArea>
