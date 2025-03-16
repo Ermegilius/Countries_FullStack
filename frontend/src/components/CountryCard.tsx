@@ -1,76 +1,79 @@
 import { useNavigate } from "react-router-dom";
 import { Country } from "../types/country";
-import Card from "@mui/material/Card";
-import CardActionArea from "@mui/material/CardActionArea";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import { CardActions } from "@mui/material";
+import { Card, CardActionArea, CardContent, CardActions, Typography } from "@mui/material";
 import FavoriteButton from "./FavoriteButton";
+import { ImageOptimizer } from "./ImageOptimizer";
+import React from "react";
 
 interface CountryCardProps {
 	country: Country;
 }
 
-const CountryCard = ({ country }: CountryCardProps) => {
+const cardStyles = {
+	borderRadius: 0,
+	borderBottomLeftRadius: 4,
+	borderBottomRightRadius: 4,
+	transition: "background-color 0.5s",
+	backgroundColor: "#d1d1d1",
+	height: "100%",
+	display: "flex",
+	flexDirection: "column",
+	justifyContent: "space-between",
+};
+
+const actionAreaStyles = {
+	display: "flex",
+	flexDirection: "column",
+	width: "100%",
+};
+
+const CountryCard = React.memo(({ country }: CountryCardProps) => {
 	const navigate = useNavigate();
 
 	const handleDetailsClick = () => {
-		navigate(`/countries/${encodeURIComponent(country.name.common.toLowerCase())}`);
+		navigate(`/countries/${encodeURIComponent(country.name.common)}`);
 	};
 
+	const {
+		flags: { png, alt },
+		name: { common },
+		region,
+		subregion,
+		capital,
+		population,
+		currencies,
+	} = country;
+
 	return (
-		<Card
-			variant="outlined"
-			sx={{
-				borderRadius: 0,
-				borderBottomLeftRadius: 4,
-				borderBottomRightRadius: 4,
-				transition: "background-color 0.2s",
-				backgroundColor: "#d3d3d3",
-				"&:hover": {
-					backgroundColor: (theme) => theme.palette.action.hover,
-				},
-			}}
-		>
-			<CardActionArea onClick={handleDetailsClick}>
-				<CardMedia
-					component="img"
-					height="140"
-					image={country.flags.png}
-					alt={country.flags.alt || country.name.common}
-					sx={{ objectFit: "contain" }}
-				/>
+		<Card onClick={handleDetailsClick} variant="outlined" sx={cardStyles}>
+			<CardActionArea sx={actionAreaStyles}>
+				<ImageOptimizer src={png} alt={alt || common} height="140px" objectFit="contain" />
 				<CardContent>
 					<Typography variant="h5" component="div">
-						{country.name.common}
+						{common}
 					</Typography>
 					<Typography variant="body2" color="text.secondary">
-						Region: {country.region} ({country.subregion})
+						Region: {region} ({subregion})
 					</Typography>
 					<Typography variant="body2" color="text.secondary">
-						Capital: {country.capital ? country.capital.join(", ") : "N/A"}
+						Capital: {capital ? capital.join(", ") : "N/A"}
 					</Typography>
 					<Typography variant="body2" color="text.secondary">
-						Population: {country.population.toLocaleString()}
+						Population: {population.toLocaleString()}
 					</Typography>
 					<Typography variant="body2" color="text.secondary">
 						Currency:{" "}
-						{country.currencies
-							? Object.values(country.currencies)[0].name +
-							  " (" +
-							  Object.values(country.currencies)[0].symbol +
-							  ")"
+						{currencies
+							? Object.values(currencies)[0].name + " (" + Object.values(currencies)[0].symbol + ")"
 							: "N/A"}
 					</Typography>
 				</CardContent>
 			</CardActionArea>
-
-			<CardActions sx={{ mt: "auto", justifyContent: "flex-end" }}>
+			<CardActions sx={{ mt: "auto", justifyContent: "flex-end", p: 1 }}>
 				<FavoriteButton country={country} />
 			</CardActions>
 		</Card>
 	);
-};
+});
 
 export default CountryCard;

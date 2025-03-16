@@ -10,49 +10,52 @@ import { AuthRedirect } from "./components/Auth/AuthRedirect";
 import CountriesList from "./components/CountriesList";
 import CountryDetail from "./components/CountryDetail";
 import Favorites from "./components/Favorites";
+import { FavoritesProvider } from "./context/FavoritesContext";
 
 function App() {
 	return (
 		<AuthProvider>
-			<BrowserRouter>
-				<Box>
-					<Navigation />
-					<Box sx={{ p: 3 }}>
-						<Routes>
-							<Route
-								path="/login"
-								element={
-									<>
-										<AuthRedirect />
-										<Login />
-									</>
-								}
-							/>
-							<Route path="/" element={<CountriesList />} />
-							<Route path="/countries" element={<CountriesList />} />
-							<Route path="/test" element={<TestData />} />
-							<Route path="/countries/:name" element={<CountryDetail />} />
-							<Route
-								path="/protected"
-								element={
-									<ProtectedRoute>
-										<ProtectedTestData />
-									</ProtectedRoute>
-								}
-							/>
-							<Route
-								path="/favorites"
-								element={
-									<ProtectedRoute>
-										<Favorites />
-									</ProtectedRoute>
-								}
-							/>
-							{/* Other routes... */}
-						</Routes>
+			<FavoritesProvider>
+				<BrowserRouter>
+					<Box>
+						<Navigation />
+						<Box sx={{ p: 3 }}>
+							<Routes>
+								<Route
+									path="/login"
+									element={
+										<>
+											<AuthRedirect />
+											<Login />
+										</>
+									}
+								/>
+								<Route path="/" element={<CountriesList />} />
+								<Route path="/countries" element={<CountriesList />} />
+								<Route path="/test" element={<TestData />} />
+								<Route path="/countries/:name" element={<CountryDetail />} />
+								<Route
+									path="/protected"
+									element={
+										<ProtectedRoute>
+											<ProtectedTestData />
+										</ProtectedRoute>
+									}
+								/>
+								<Route
+									path="/favorites"
+									element={
+										<ProtectedRoute>
+											<Favorites />
+										</ProtectedRoute>
+									}
+								/>
+								{/* Other routes... */}
+							</Routes>
+						</Box>
 					</Box>
-				</Box>
-			</BrowserRouter>
+				</BrowserRouter>
+			</FavoritesProvider>
 		</AuthProvider>
 	);
 }

@@ -7,6 +7,11 @@ let favoritesCache: CountryFavorite[] | null = null;
 let lastFetchTime = 0;
 const CACHE_EXPIRY = 30000; // 30 seconds
 
+// Flag to track if favorites are being loaded
+let isFetchingFavorites = false;
+// Promise for pending fetch operation
+let fetchPromise: Promise<CountryFavorite[]> | null = null;
+
 export const favoritesApi = {
 	/**
 	 * Get all favorites for the current user
@@ -20,66 +25,83 @@ export const favoritesApi = {
 			return favoritesCache;
 		}
 
-		const { data, error } = await supabase.from("country_favorites").select("*");
-
-		if (error) {
-			console.error("Error fetching favorites:", error);
-			throw new Error(error.message);
+		// If already fetching, return the existing promise to avoid duplicate requests
+		if (isFetchingFavorites && fetchPromise) {
+			return fetchPromise;
 		}
 
-		// Update cache
-		favoritesCache = data || [];
-		lastFetchTime = now;
+		// Set fetching flag and create a new promise
+		isFetchingFavorites = true;
+		fetchPromise = (async () => {
+			try {
+				const { data, error } = await supabase.from("country_favorites").select("*");
 
-		return favoritesCache;
+				if (error) {
+					console.error("Error fetching favorites:", error);
+					throw new Error(error.message);
+				}
+
+				// Update cache
+				favoritesCache = data || [];
+				lastFetchTime = now;
+				return favoritesCache;
+			} finally {
+				isFetchingFavorites = false;
+				fetchPromise = null;
+			}
+		})();
+
+		return fetchPromise;
 	},
 
 	/**
 	 * Add a country to favorites
 	 */
-	async addFavorite(country: Country): Promise<CountryFavorite> {
-		const { data, error } = await supabase
-			.from("country_favorites")
-			.insert([
-				{
-					country_name: country.name.common,
-					country_code: country.cca3,
-					country_flag: country.flags.png,
-				},
-			])
-			.select()
-			.single();
+	async addFavorite(country: Country): Promise<void> {
+		const { error } = await supabase.from("country_favorites").insert([
+			{
+				country_name: country.name.common,
+				country_code: country.cca3,
+				country_flag: country.flags.png || country.flags.svg,
+			},
+		]);
 
 		if (error) {
 			console.error("Error adding favorite:", error);
 			throw new Error(error.message);
 		}
 
-		// Update cache if it exists
-		if (favoritesCache) {
-			favoritesCache.push(data);
-		}
-
-		return data;
+		// Invalidate cache to force refresh on next get
+		favoritesCache = null;
 	},
 
 	/**
 	 * Remove a country from favorites
 	 */
 	async removeFavorite(countryName: string): Promise<void> {
-		const { error } = await supabase
-			.from("country_favorites")
-			.delete()
-			.eq("country_name", countryName);
+		const { error } = await supabase.from("country_favorites").delete().eq("country_name", countryName);
 
 		if (error) {
 			console.error("Error removing favorite:", error);
 			throw new Error(error.message);
 		}
 
-		// Update cache if it exists
-		if (favoritesCache) {
-			favoritesCache = favoritesCache.filter((fav) => fav.country_name !== countryName);
+		// Invalidate cache to force refresh on next get
+		favoritesCache = null;
+	},
+
+	/**
+	 * Toggle favorite status for a country
+	 */
+	async toggleFavorite(country: Country): Promise<boolean> {
+		const isFav = await this.isFavorite(country.name.common);
+
+		if (isFav) {
+			await this.removeFavorite(country.name.common);
+			return false;
+		} else {
+			await this.addFavorite(country);
+			return true;
 		}
 	},
 
@@ -87,31 +109,38 @@ export const favoritesApi = {
 	 * Check if a country is in favorites
 	 */
 	async isFavorite(countryName: string): Promise<boolean> {
-		// Try to use cache first
-		if (favoritesCache) {
-			const found = favoritesCache.some((fav) => fav.country_name === countryName);
-			return found;
+		// Make sure we have the favorites loaded first
+		if (!favoritesCache) {
+			await this.getFavorites();
 		}
 
-		// If no cache, make a targeted query
-		const { data, error } = await supabase
-			.from("country_favorites")
-			.select("id")
-			.eq("country_name", countryName)
-			.maybeSingle();
+		// Now we can safely use the cache
+		return favoritesCache!.some((fav) => fav.country_name === countryName);
+	},
 
-		if (error) {
-			console.error("Error checking favorite status:", error);
-			throw new Error(error.message);
+	/**
+	 * Check if multiple countries are favorites in one operation
+	 * Use this when rendering lists of countries
+	 */
+	async batchCheckFavorites(countryNames: string[]): Promise<Record<string, boolean>> {
+		// Make sure we have favorites loaded first
+		if (!favoritesCache) {
+			await this.getFavorites();
 		}
 
-		return !!data;
+		// Create a map of country names to their favorite status
+		const result: Record<string, boolean> = {};
+		countryNames.forEach((name) => {
+			result[name] = favoritesCache!.some((fav) => fav.country_name === name);
+		});
+
+		return result;
 	},
 
 	/**
 	 * Clear the favorites cache
 	 */
-	clearCache() {
+	clearCache(): void {
 		favoritesCache = null;
 		lastFetchTime = 0;
 	},

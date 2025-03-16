@@ -1,66 +1,40 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
 import { Country } from "../types/country";
-import { favoritesApi } from "../api/services/favorites";
 import { IconButton, Tooltip } from "@mui/material";
-import { Favorite, FavoriteBorder } from "@mui/icons-material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { useAuth } from "../context/AuthContext";
+import { useFavorites } from "../context/FavoritesContext";
 
 interface FavoriteButtonProps {
 	country: Country;
-	onToggle?: (isFavorite: boolean) => void;
 }
 
-const FavoriteButton = ({ country, onToggle }: FavoriteButtonProps) => {
+const FavoriteButton = ({ country }: FavoriteButtonProps) => {
 	const { user } = useAuth();
-	const [isFavorite, setIsFavorite] = useState(false);
-	const [loading, setLoading] = useState(false);
-	const [isInitialized, setIsInitialized] = useState(false);
+	const { favoriteStatus, isLoading, toggleFavorite } = useFavorites();
 
-	useEffect(() => {
-		if (!user || isInitialized) {
-			return;
-		}
-		const checkFavoriteStatus = async () => {
-			try {
-				const status = await favoritesApi.isFavorite(country.name.common);
-				setIsFavorite(status);
-				setIsInitialized(true);
-			} catch (error) {
-				console.error("Error checking favorite status:", error);
-			}
-		};
-		checkFavoriteStatus();
-	}, [country.name.common, isInitialized, user]);
+	const isFavorite = favoriteStatus[country.name.common] || false;
 
-	const handleToggleFavorite = async () => {
+	const handleToggleFavorite = async (e: React.MouseEvent) => {
+		e.stopPropagation(); // Prevent card click from triggering
 		if (!user) return;
-		setLoading(true);
-		try {
-			if (isFavorite) {
-				await favoritesApi.removeFavorite(country.name.common);
-				setIsFavorite(false);
-			} else {
-				await favoritesApi.addFavorite(country);
-				setIsFavorite(true);
-			}
-			if (onToggle) {
-				onToggle(!isFavorite);
-			}
-		} catch (error) {
-			console.error("Error toggling favorite:", error);
-		} finally {
-			setLoading(false);
-		}
+
+		await toggleFavorite(country.name.common, country.cca3, country.flags.png || country.flags.svg);
 	};
 
 	if (!user) {
-		return null;
+		return null; // Don't render button for non-authenticated users
 	}
 
 	return (
 		<Tooltip title={isFavorite ? "Remove from favorites" : "Add to favorites"}>
-			<IconButton onClick={handleToggleFavorite} disabled={loading} color="primary">
-				{isFavorite ? <Favorite /> : <FavoriteBorder />}
+			<IconButton
+				color={isFavorite ? "error" : "default"}
+				onClick={handleToggleFavorite}
+				disabled={isLoading}
+				aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+			>
+				{isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
 			</IconButton>
 		</Tooltip>
 	);
