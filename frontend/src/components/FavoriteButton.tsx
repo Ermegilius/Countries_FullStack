@@ -36,7 +36,7 @@ const FavoriteButton = ({ country }: FavoriteButtonProps) => {
 				{isFavorite ? (
 					<FavoriteIcon sx={(theme) => ({ color: theme.palette.accent.main })} />
 				) : (
-					<FavoriteBorderIcon />
+					<FavoriteBorderIcon sx={(theme) => ({ color: theme.palette.accent.main })} />
 				)}
 			</IconButton>
 		</Tooltip>

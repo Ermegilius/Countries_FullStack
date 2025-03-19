@@ -4,7 +4,7 @@ import { Card, CardActionArea, CardContent, CardActions, Typography } from "@mui
 import FavoriteButton from "./FavoriteButton";
 import { ImageOptimizer } from "./ImageOptimizer";
 import React from "react";
-import { useTheme } from "../theme/useTheme";
+import { useTheme as useMuiTheme } from "@mui/material/styles";
 interface CountryCardProps {
 	country: Country;
 }
@@ -16,15 +16,15 @@ const actionAreaStyles = {
 };
 
 const CountryCard = React.memo(({ country }: CountryCardProps) => {
-	const { mode } = useTheme();
 	const navigate = useNavigate();
+	const muiTheme = useMuiTheme();
 
 	const cardStyles = {
 		borderRadius: 0,
 		borderBottomLeftRadius: 4,
 		borderBottomRightRadius: 4,
 		transition: "background-color 0.5s",
-		backgroundColor: mode === "dark" ? "#333333" : "#ffffff",
+		backgroundColor: muiTheme.palette.background.paper,
 		height: "100%",
 		display: "flex",
 		flexDirection: "column",
@@ -49,7 +49,16 @@ const CountryCard = React.memo(({ country }: CountryCardProps) => {
 		<Card onClick={handleDetailsClick} variant="outlined" sx={cardStyles}>
 			<CardActionArea sx={actionAreaStyles}>
 				<ImageOptimizer src={png} alt={alt || common} height="140px" objectFit="contain" />
-				<CardContent>
+				<CardContent
+					sx={{
+						padding: 2,
+						display: "flex",
+						flexDirection: "column",
+						gap: 1,
+						textAlign: "left",
+						width: "100%",
+					}}
+				>
 					<Typography variant="h5" component="div">
 						{common}
 					</Typography>

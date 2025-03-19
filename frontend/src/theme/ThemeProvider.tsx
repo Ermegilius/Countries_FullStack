@@ -1,11 +1,12 @@
 import CssBaseline from "@mui/material/CssBaseline";
-import { createTheme, ThemeProvider as MUIThemeProvider } from "@mui/material/styles";
+import { ThemeProvider as MUIThemeProvider } from "@mui/material/styles";
 import { ReactNode, useMemo, useState } from "react";
-import { theme as baseTheme } from "./theme";
+import { createAppTheme } from "./theme";
 import { ThemeContext } from "./themeContext";
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 	const [mode, setMode] = useState<"light" | "dark">("light");
+
 	const colorMode = useMemo(
 		() => ({
 			toggleColorMode: () => {
@@ -16,24 +17,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 		[mode]
 	);
 
-	const theme = useMemo(
-		() =>
-			createTheme({
-				...baseTheme,
-				palette: {
-					...baseTheme.palette,
-					mode,
-					background: {
-						default: mode === "light" ? "#f5f5f5" : "#121212", // Main app background
-					},
-					text: {
-						primary: mode === "light" ? "rgba(0, 0, 0, 0.87)" : "rgba(255, 255, 255, 0.87)",
-						secondary: mode === "light" ? "rgba(0, 0, 0, 0.6)" : "rgba(255, 255, 255, 0.6)",
-					},
-				},
-			}),
-		[mode]
-	);
+	// Use the createAppTheme function to get a theme based on the current mode
+	const theme = useMemo(() => createAppTheme(mode), [mode]);
 
 	return (
 		<ThemeContext.Provider value={colorMode}>

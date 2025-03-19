@@ -11,7 +11,7 @@ export const Navigation = () => {
 	const { toggleColorMode, mode } = useTheme();
 
 	return (
-		<AppBar position="sticky" sx={{ mb: 3 }}>
+		<AppBar position="sticky" sx={{ mb: 3, bgcolor: "primary.main" }}>
 			<Toolbar>
 				<Button color="inherit" component={RouterLink} to="/">
 					Home
