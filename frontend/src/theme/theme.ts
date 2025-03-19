@@ -12,6 +12,9 @@ export const theme = createTheme({
 			light: "#ba68c8",
 			dark: "#7b1fa2",
 		},
+		accent: {
+			main: "#f50057",
+		},
 		action: {
 			hover: "#e5e5e5",
 		},

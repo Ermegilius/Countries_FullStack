@@ -1,4 +1,4 @@
-import { AppBar, Button, IconButton, Toolbar, useTheme as useMuiTheme } from "@mui/material";
+import { AppBar, Button, IconButton, Toolbar } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Favorite, Lock } from "@mui/icons-material";
@@ -26,7 +26,12 @@ export const Navigation = () => {
 					Countries
 				</Button>
 				{user && (
-					<Button color="inherit" component={RouterLink} to="/favorites" startIcon={<Favorite />}>
+					<Button
+						color="inherit"
+						component={RouterLink}
+						to="/favorites"
+						startIcon={<Favorite sx={{ color: (theme) => theme.palette.accent.main }} />}
+					>
 						Favorites
 					</Button>
 				)}

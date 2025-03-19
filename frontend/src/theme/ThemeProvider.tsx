@@ -23,6 +23,13 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 				palette: {
 					...baseTheme.palette,
 					mode,
+					background: {
+						default: mode === "light" ? "#f5f5f5" : "#121212", // Main app background
+					},
+					text: {
+						primary: mode === "light" ? "rgba(0, 0, 0, 0.87)" : "rgba(255, 255, 255, 0.87)",
+						secondary: mode === "light" ? "rgba(0, 0, 0, 0.6)" : "rgba(255, 255, 255, 0.6)",
+					},
 				},
 			}),
 		[mode]

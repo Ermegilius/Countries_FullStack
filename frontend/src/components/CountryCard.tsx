@@ -4,22 +4,10 @@ import { Card, CardActionArea, CardContent, CardActions, Typography } from "@mui
 import FavoriteButton from "./FavoriteButton";
 import { ImageOptimizer } from "./ImageOptimizer";
 import React from "react";
-
+import { useTheme } from "../theme/useTheme";
 interface CountryCardProps {
 	country: Country;
 }
-
-const cardStyles = {
-	borderRadius: 0,
-	borderBottomLeftRadius: 4,
-	borderBottomRightRadius: 4,
-	transition: "background-color 0.5s",
-	backgroundColor: "#d1d1d1",
-	height: "100%",
-	display: "flex",
-	flexDirection: "column",
-	justifyContent: "space-between",
-};
 
 const actionAreaStyles = {
 	display: "flex",
@@ -28,7 +16,20 @@ const actionAreaStyles = {
 };
 
 const CountryCard = React.memo(({ country }: CountryCardProps) => {
+	const { mode } = useTheme();
 	const navigate = useNavigate();
+
+	const cardStyles = {
+		borderRadius: 0,
+		borderBottomLeftRadius: 4,
+		borderBottomRightRadius: 4,
+		transition: "background-color 0.5s",
+		backgroundColor: mode === "dark" ? "#333333" : "#ffffff",
+		height: "100%",
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "space-between",
+	};
 
 	const handleDetailsClick = () => {
 		navigate(`/countries/${encodeURIComponent(country.name.common)}`);
@@ -52,16 +53,12 @@ const CountryCard = React.memo(({ country }: CountryCardProps) => {
 					<Typography variant="h5" component="div">
 						{common}
 					</Typography>
-					<Typography variant="body2" color="text.secondary">
+					<Typography variant="body2">
 						Region: {region} ({subregion})
 					</Typography>
-					<Typography variant="body2" color="text.secondary">
-						Capital: {capital ? capital.join(", ") : "N/A"}
-					</Typography>
-					<Typography variant="body2" color="text.secondary">
-						Population: {population.toLocaleString()}
-					</Typography>
-					<Typography variant="body2" color="text.secondary">
+					<Typography variant="body2">Capital: {capital ? capital.join(", ") : "N/A"}</Typography>
+					<Typography variant="body2">Population: {population.toLocaleString()}</Typography>
+					<Typography variant="body2">
 						Currency:{" "}
 						{currencies
 							? Object.values(currencies)[0].name + " (" + Object.values(currencies)[0].symbol + ")"

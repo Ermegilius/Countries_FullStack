@@ -29,12 +29,15 @@ const FavoriteButton = ({ country }: FavoriteButtonProps) => {
 	return (
 		<Tooltip title={isFavorite ? "Remove from favorites" : "Add to favorites"}>
 			<IconButton
-				color={isFavorite ? "error" : "default"}
 				onClick={handleToggleFavorite}
 				disabled={isLoading}
 				aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
 			>
-				{isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+				{isFavorite ? (
+					<FavoriteIcon sx={(theme) => ({ color: theme.palette.accent.main })} />
+				) : (
+					<FavoriteBorderIcon />
+				)}
 			</IconButton>
 		</Tooltip>
 	);
