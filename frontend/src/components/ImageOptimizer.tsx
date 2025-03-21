@@ -72,7 +72,8 @@ export const ImageOptimizer = ({
 				height,
 				objectFit,
 				display: "block",
-				backgroundColor: "#d3d3d370",
+				padding: "15px",
+				//backgroundColor: "#d3d3d370",
 			}}
 			loading="lazy"
 		/>

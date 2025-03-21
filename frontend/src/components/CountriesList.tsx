@@ -32,7 +32,10 @@ const CountriesList = () => {
 
 	// Filter the countries by input value without mutating the state
 	const filteredCountries = useMemo(
-		() => sortedCountries.filter((option) => option.name.common.toLowerCase().includes(inputValue.toLowerCase())),
+		() =>
+			sortedCountries.filter((option) =>
+				option.name.common.toLowerCase().includes(inputValue.toLowerCase())
+			),
 		[sortedCountries, inputValue]
 	);
 
@@ -88,7 +91,9 @@ const CountriesList = () => {
 
 	// Custom filter function for Autocomplete
 	const filterOptions = (options: Country[], { inputValue }: { inputValue: string }) => {
-		return options.filter((option) => option.name.common.toLowerCase().includes(inputValue.toLowerCase()));
+		return options.filter((option) =>
+			option.name.common.toLowerCase().includes(inputValue.toLowerCase())
+		);
 	};
 
 	if (loading) {
@@ -118,7 +123,64 @@ const CountriesList = () => {
 					options={sortedCountries}
 					getOptionLabel={(option) => option.name.common}
 					sx={{ width: "100%", mb: 2 }}
-					renderInput={(params) => <TextField {...params} label="Country" />}
+					slotProps={{
+						paper: {
+							sx: {
+								backgroundColor: "primary.dark",
+								boxShadow: "0 8px 16px rgba(0, 0, 0, 0.15)",
+								borderRadius: 2,
+							},
+						},
+					}}
+					ListboxProps={{
+						sx: {
+							padding: 1,
+							// Style for each option
+							"& .MuiAutocomplete-option": {
+								borderRadius: 1,
+								my: 0.5,
+							},
+							// Style for highlighted/focused option
+							"& .MuiAutocomplete-option.Mui-focused": {
+								backgroundColor: "rgba(63, 114, 175, 0.15)", // Light blue with transparency
+							},
+							// Style for selected option
+							"& .MuiAutocomplete-option[aria-selected='true']": {
+								backgroundColor: "rgba(63, 114, 175, 0.3)",
+							},
+							// Style for selected AND focused option
+							"& .MuiAutocomplete-option[aria-selected='true'].Mui-focused": {
+								backgroundColor: "rgba(63, 114, 175, 0.4)",
+							},
+						},
+					}}
+					renderInput={(params) => (
+						<TextField
+							{...params}
+							label="Country"
+							sx={{
+								// For the input text when focused
+								"& .MuiInputBase-root.Mui-focused input": {
+									color: "text.secondary",
+								},
+								// For the label when focused
+								"& .MuiInputLabel-root.Mui-focused": {
+									color: "accent.main",
+									fontWeight: "bold",
+								},
+								// For the outline when focused
+								"& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+									{
+										borderColor: "primary.dark",
+									},
+
+								// Background color when focused
+								"& .MuiOutlinedInput-root.Mui-focused": {
+									backgroundColor: "rgba(219, 226, 239,0.2)",
+								},
+							}}
+						/>
+					)}
 					filterOptions={filterOptions}
 					inputValue={inputValue}
 					onInputChange={(event, newInputValue) => {

@@ -65,12 +65,19 @@ const CountryCard = React.memo(({ country }: CountryCardProps) => {
 					<Typography variant="body2">
 						Region: {region} ({subregion})
 					</Typography>
-					<Typography variant="body2">Capital: {capital ? capital.join(", ") : "N/A"}</Typography>
-					<Typography variant="body2">Population: {population.toLocaleString()}</Typography>
+					<Typography variant="body2">
+						Capital: {capital ? capital.join(", ") : "N/A"}
+					</Typography>
+					<Typography variant="body2">
+						Population: {population.toLocaleString()}
+					</Typography>
 					<Typography variant="body2">
 						Currency:{" "}
 						{currencies
-							? Object.values(currencies)[0].name + " (" + Object.values(currencies)[0].symbol + ")"
+							? Object.values(currencies)[0].name +
+							  " (" +
+							  Object.values(currencies)[0].symbol +
+							  ")"
 							: "N/A"}
 					</Typography>
 				</CardContent>
