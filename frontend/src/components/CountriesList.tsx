@@ -126,31 +126,31 @@ const CountriesList = () => {
 					slotProps={{
 						paper: {
 							sx: {
-								backgroundColor: "primary.dark",
+								backgroundColor: "secondary.dark",
 								boxShadow: "0 8px 16px rgba(0, 0, 0, 0.15)",
 								borderRadius: 2,
 							},
 						},
-					}}
-					ListboxProps={{
-						sx: {
-							padding: 1,
-							// Style for each option
-							"& .MuiAutocomplete-option": {
-								borderRadius: 1,
-								my: 0.5,
-							},
-							// Style for highlighted/focused option
-							"& .MuiAutocomplete-option.Mui-focused": {
-								backgroundColor: "rgba(63, 114, 175, 0.15)", // Light blue with transparency
-							},
-							// Style for selected option
-							"& .MuiAutocomplete-option[aria-selected='true']": {
-								backgroundColor: "rgba(63, 114, 175, 0.3)",
-							},
-							// Style for selected AND focused option
-							"& .MuiAutocomplete-option[aria-selected='true'].Mui-focused": {
-								backgroundColor: "rgba(63, 114, 175, 0.4)",
+						listbox: {
+							sx: {
+								padding: 1,
+								// Style for each option
+								"& .MuiAutocomplete-option": {
+									borderRadius: 1,
+									my: 0.5,
+								},
+								// Style for highlighted/focused option
+								"& .MuiAutocomplete-option.Mui-focused": {
+									backgroundColor: "rgba(63, 114, 175, 0.15)",
+								},
+								// Style for selected option
+								"& .MuiAutocomplete-option[aria-selected='true']": {
+									backgroundColor: "rgba(63, 114, 175, 0.3)",
+								},
+								// Style for selected AND focused option
+								"& .MuiAutocomplete-option[aria-selected='true'].Mui-focused": {
+									backgroundColor: "rgba(63, 114, 175, 0.4)",
+								},
 							},
 						},
 					}}

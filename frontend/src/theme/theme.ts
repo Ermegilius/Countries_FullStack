@@ -1,4 +1,4 @@
-import { createTheme, PaletteMode, ThemeOptions } from "@mui/material/styles";
+import { createTheme, PaletteMode, Theme, ThemeOptions } from "@mui/material/styles";
 import { deepmerge } from "@mui/utils";
 
 // Declare module augmentation for custom palette properties
@@ -26,11 +26,11 @@ export const createAppTheme = (mode: PaletteMode) => {
 				light: "#F9F7F7",
 				dark: "#bbdefb",
 			},
-			// secondary: {
-			// 	main: "#9c27b0",
-			// 	light: "#ba68c8",
-			// 	dark: "#7b1fa2",
-			// },
+			secondary: {
+				main: "#3F72AF",
+				light: "#bbdefb",
+				dark: "#64b5f6",
+			},
 			accent: {
 				main: "#f50057",
 			},
@@ -81,11 +81,11 @@ export const createAppTheme = (mode: PaletteMode) => {
 				light: "#bbdefb",
 				dark: "#64b5f6",
 			},
-			// secondary: {
-			// 	main: "#9c27b0",
-			// 	light: "#ba68c8",
-			// 	dark: "#7b1fa2",
-			// },
+			secondary: {
+				main: "#2196f3",
+				light: "#64b5f6",
+				dark: "#112D4E",
+			},
 			accent: {
 				main: "#FF61CA",
 			},
@@ -157,23 +157,30 @@ export const createAppTheme = (mode: PaletteMode) => {
 				lineHeight: 1.5,
 			},
 			button: {
-				// Use 'none' as a valid TextTransform value
 				textTransform: "none" as const,
+				margin: ".3rem",
+				fontSize: "1.1rem",
 			},
 		},
 		components: {
-			MuiButton: {
-				styleOverrides: {
-					root: {
-						borderRadius: 8,
-					},
-				},
-			},
 			MuiCard: {
 				styleOverrides: {
 					root: {
 						borderRadius: 12,
 						boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+					},
+				},
+			},
+			MuiAppBar: {
+				styleOverrides: {
+					root: {
+						"& .MuiButton-root": {
+							"&:hover": {
+								backgroundColor: "rgba(218, 6, 6, 0.95)", //TODO set normal color later
+								transform: "translateY(-1px)",
+								boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+							},
+						},
 					},
 				},
 			},

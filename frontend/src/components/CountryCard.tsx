@@ -63,7 +63,7 @@ const CountryCard = React.memo(({ country }: CountryCardProps) => {
 						{common}
 					</Typography>
 					<Typography variant="body2">
-						Region: {region} ({subregion})
+						Region: {region} ({subregion ? subregion : "N/A"})
 					</Typography>
 					<Typography variant="body2">
 						Capital: {capital ? capital.join(", ") : "N/A"}
