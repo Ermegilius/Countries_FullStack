@@ -15,35 +15,72 @@ declare module "@mui/material/styles" {
 	}
 }
 
+// Define theme colors as constants
+const themeColors = {
+	light: {
+		primary: {
+			main: "#3F72AF",
+			light: "#F9F7F7",
+			dark: "#bbdefb",
+		},
+		secondary: {
+			main: "#3F72AF",
+			light: "#bbdefb",
+			dark: "#64b5f6",
+		},
+		accent: "#f50057",
+		background: {
+			default: "#F9F7F7",
+			paper: "#DBE2EF",
+		},
+		text: {
+			primary: "#112D4E",
+			secondary: "#3F72AF",
+		},
+		hover: "#bbdefb",
+	},
+	dark: {
+		primary: {
+			main: "#112D4E",
+			light: "#bbdefb",
+			dark: "#64b5f6",
+		},
+		secondary: {
+			main: "#2196f3",
+			light: "#64b5f6",
+			dark: "#112D4E",
+		},
+		accent: "#FF61CA",
+		background: {
+			default: "#112D4E",
+			paper: "#3F72AF",
+		},
+		text: {
+			primary: "#F9F7F7",
+			secondary: "#DBE2EF",
+		},
+		hover: "#3F72AF",
+	},
+};
+
 // Create a function that returns a theme based on the current mode
 export const createAppTheme = (mode: PaletteMode) => {
+	// Get colors based on current mode
+	const colors = mode === "light" ? themeColors.light : themeColors.dark;
+
 	// Light theme settings
 	const lightTheme: ThemeOptions = {
 		palette: {
 			mode: "light",
-			primary: {
-				main: "#3F72AF",
-				light: "#F9F7F7",
-				dark: "#bbdefb",
-			},
-			secondary: {
-				main: "#3F72AF",
-				light: "#bbdefb",
-				dark: "#64b5f6",
-			},
+			primary: themeColors.light.primary,
+			secondary: themeColors.light.secondary,
 			accent: {
-				main: "#f50057",
+				main: themeColors.light.accent,
 			},
-			background: {
-				default: "#F9F7F7",
-				paper: "#DBE2EF",
-			},
-			text: {
-				primary: "#112D4E",
-				secondary: "#3F72AF",
-			},
+			background: themeColors.light.background,
+			text: themeColors.light.text,
 			action: {
-				hover: "#e5e5e5",
+				hover: themeColors.light.hover,
 			},
 		},
 		components: {
@@ -76,32 +113,17 @@ export const createAppTheme = (mode: PaletteMode) => {
 	const darkTheme: ThemeOptions = {
 		palette: {
 			mode: "dark",
-			primary: {
-				main: "#112D4E",
-				light: "#bbdefb",
-				dark: "#64b5f6",
-			},
-			secondary: {
-				main: "#2196f3",
-				light: "#64b5f6",
-				dark: "#112D4E",
-			},
+			primary: themeColors.dark.primary,
+			secondary: themeColors.dark.secondary,
 			accent: {
-				main: "#FF61CA",
+				main: themeColors.dark.accent,
 			},
-			background: {
-				default: "#112D4E",
-				paper: "#3F72AF",
-			},
-			text: {
-				primary: "#F9F7F7",
-				secondary: "#DBE2EF",
-			},
+			background: themeColors.dark.background,
+			text: themeColors.dark.text,
 			action: {
-				hover: "#e5e5e5",
+				hover: themeColors.dark.hover,
 			},
 		},
-
 		components: {
 			MuiCssBaseline: {
 				styleOverrides: {
@@ -159,7 +181,8 @@ export const createAppTheme = (mode: PaletteMode) => {
 			button: {
 				textTransform: "none" as const,
 				margin: ".3rem",
-				fontSize: "1.1rem",
+				fontSize: "1rem",
+				fontWeight: 450,
 			},
 		},
 		components: {
@@ -176,7 +199,8 @@ export const createAppTheme = (mode: PaletteMode) => {
 					root: {
 						"& .MuiButton-root": {
 							"&:hover": {
-								backgroundColor: "rgba(218, 6, 6, 0.95)", //TODO set normal color later
+								backgroundColor: colors.hover,
+								color: colors.text.primary,
 								transform: "translateY(-1px)",
 								boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
 							},
@@ -188,8 +212,7 @@ export const createAppTheme = (mode: PaletteMode) => {
 	};
 
 	// Merge themes based on mode
-	const themeOptions =
-		mode === "light" ? deepmerge(commonTheme, lightTheme) : deepmerge(commonTheme, darkTheme);
+	const themeOptions = mode === "light" ? deepmerge(commonTheme, lightTheme) : deepmerge(commonTheme, darkTheme);
 
 	return createTheme(themeOptions);
 };
