@@ -12,9 +12,7 @@ const ProtectedTestData = () => {
 
 	const fetchProtectedData = async () => {
 		try {
-			const { data: protectedData, error } = await supabase
-				.from("protected_data")
-				.select("*");
+			const { data: protectedData, error } = await supabase.from("protected_data").select("*");
 			if (error) {
 				throw error;
 			}
@@ -36,7 +34,7 @@ const ProtectedTestData = () => {
 	return (
 		<Box sx={{ p: 3 }}>
 			<Typography variant="h2" gutterBottom>
-				Protected test data inly for authenticated users
+				Protected test data only for authenticated users
 			</Typography>
 			<CreateEntryForm onSuccess={fetchProtectedData} />
 			{data.length > 0 ? (
